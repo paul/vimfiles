@@ -8,7 +8,6 @@ syntax on
 filetype on
 filetype indent on
 filetype plugin on
-let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme vividchalk
 
 " Do clever indent things. Don't make a # force column zero.
@@ -27,7 +26,7 @@ set backspace=indent,eol,start
 set scrolloff=5
 set sidescrolloff=2
 
-set tabstop=8
+set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab
@@ -49,7 +48,7 @@ set incsearch
 set showfulltag
 
 " dont wrap; show line numbers
-set nowrap
+"set nowrap
 set number
 
 " disable arrow keys
