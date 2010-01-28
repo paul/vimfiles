@@ -247,6 +247,9 @@ call s:rgbfg("Comment",      "#8a8a8a")
 call s:hifg("Constant"       ,"#339999","DarkCyan",21) " 30
 call s:hifg("rubyNumber"     ,"#CCFF33","Yellow",60) " 190
 call s:hifg("String"         ,"#66FF00","LightGreen",44,82) " 82
+call s:rgbfg("rubySingleString",   "#00afff")
+call s:rgbfg("rubyString",   "#005fff")
+call s:rgbfg("rubySymbol",   "#0000ff")
 call s:hifg("Identifier"     ,"#FFCC00","Yellow",72) " 220
 call s:hifg("Statement"      ,"#FF6600","Brown",68) " 202
 call s:hifg("PreProc"        ,"#AAFFFF","LightCyan",47) " 213
