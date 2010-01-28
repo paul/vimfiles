@@ -15,7 +15,7 @@ if exists("syntax_on")
    syntax reset
 endif
 
-let colors_name = "vividchalk"
+let colors_name = "vividrando"
 
 " First two functions adapted from inkpot.vim
 
@@ -69,6 +69,76 @@ endfunction
 function! s:hibg(group,guibg,first,second)
     let ctermbg = s:choose(a:first,a:second)
     exe "highlight ".a:group." guibg=".a:guibg." ctermbg=".ctermbg
+endfunction
+
+"" the 6 value iterations in the xterm color cube
+let s:valuerange = [ 0x00, 0x5F, 0x87, 0xAF, 0xD7, 0xFF ]
+
+"" 16 basic colors
+let s:basic16 = [ [ 0x00, 0x00, 0x00 ], [ 0xCD, 0x00, 0x00 ], [ 0x00, 0xCD, 0x00 ], [ 0xCD, 0xCD, 0x00 ], [ 0x00, 0x00, 0xEE ], [ 0xCD, 0x00, 0xCD ], [ 0x00, 0xCD, 0xCD ], [ 0xE5, 0xE5, 0xE5 ], [ 0x7F, 0x7F, 0x7F ], [ 0xFF, 0x00, 0x00 ], [ 0x00, 0xFF, 0x00 ], [ 0xFF, 0xFF, 0x00 ], [ 0x5C, 0x5C, 0xFF ], [ 0xFF, 0x00, 0xFF ], [ 0x00, 0xFF, 0xFF ], [ 0xFF, 0xFF, 0xFF ] ]
+
+function! s:Xterm2rgb(color) 
+  " 16 basic colors
+  let r=0
+  let g=0
+  let b=0
+  if a:color<16
+    let r = s:basic16[a:color][0]
+    let g = s:basic16[a:color][1]
+    let b = s:basic16[a:color][2]
+  endif
+
+  " color cube color
+  if a:color>=16 && a:color<=232
+    let color=a:color-16
+    let r = s:valuerange[(color/36)%6]
+    let g = s:valuerange[(color/6)%6]
+    let b = s:valuerange[color%6]
+  endif
+
+  " gray tone
+  if a:color>=233 && a:color<=253
+    let r=8+(a:color-232)*0x0a
+    let g=r
+    let b=r
+  endif
+  let rgb=[r,g,b]
+  return rgb
+endfunction
+
+function! s:pow(x, n)
+  let x = a:x
+  for i in range(a:n-1)
+    let x = x*a:x
+  return x
+endfunction
+
+let s:colortable=[]
+for c in range(0, 254)
+  let color = s:Xterm2rgb(c)
+  call add(s:colortable, color)
+endfor
+
+" selects the nearest xterm color for a rgb value like #FF0000
+function! s:Rgb2xterm(color)
+  let best_match=0
+  let smallest_distance = 10000000000
+  let r = eval('0x'.a:color[1].a:color[2])
+  let g = eval('0x'.a:color[3].a:color[4])
+  let b = eval('0x'.a:color[5].a:color[6])
+  for c in range(0,254)
+    let d = s:pow(s:colortable[c][0]-r,2) + s:pow(s:colortable[c][1]-g,2) + s:pow(s:colortable[c][2]-b,2)
+    if d<smallest_distance
+      let smallest_distance = d
+      let best_match = c
+    endif
+  endfor
+  return best_match
+endfunction
+
+function! s:rgbfg(group,color)
+  let ctermfg = s:Rgb2xterm(a:color)
+  exe "highlight ".a:group." guifg=".a:color." ctermfg=".ctermfg
 endfunction
 
 hi link railsMethod         PreProc
@@ -165,13 +235,14 @@ call s:hibg("TabLineFill","#808080","Grey",83)
 
 hi Type gui=none
 hi Statement gui=none
-hi Comment gui=italic
-hi railsUserClass  gui=italic
-hi railsUserMethod gui=italic
+hi Comment gui=italic cterm=italic
+hi railsUserClass  gui=italic cterm=italic
+hi railsUserMethod gui=italic cterm=italic
 hi Identifier cterm=none
 " Commented numbers at the end are *old* 256 color values
 "highlight PreProc       guifg=#EDF8F9
-call s:hifg("Comment"        ,"#9933CC","DarkMagenta",34) " 92
+"call s:hifg("Comment"        ,"#9933CC","DarkMagenta",92) " 92
+call s:rgbfg("Comment",      "#8a8a8a")
 " 26 instead?
 call s:hifg("Constant"       ,"#339999","DarkCyan",21) " 30
 call s:hifg("rubyNumber"     ,"#CCFF33","Yellow",60) " 190

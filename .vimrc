@@ -8,7 +8,7 @@ syntax on
 filetype on
 filetype indent on
 filetype plugin on
-colorscheme vividchalk
+colorscheme vividrando
 
 " Do clever indent things. Don't make a # force column zero.
 set autoindent
@@ -50,6 +50,9 @@ set showfulltag
 " dont wrap; show line numbers
 "set nowrap
 set number
+
+" Show $ at end of line and trailing space as ~
+set lcs=tab:\ \ ,eol:$,trail:~,extends:>,precedes:<
 
 " disable arrow keys
 map <down> <nop>
