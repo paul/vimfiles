@@ -1,5 +1,7 @@
 set nocompatible
 
+call pathogen#runtime_prepend_subdirectories(expand('~/.vim/bundles'))
+
 " syntax highlighting
 set t_Co=256
 syntax on
@@ -45,4 +47,33 @@ set hlsearch
 set incsearch
 " Show full tags when doing search completion
 set showfulltag
+
+" dont wrap; show line numbers
+set nowrap
+set number
+
+" disable arrow keys
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+map <up> <nop>
+
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
+imap <up> <nop>
+
+" Make arrow keys useful again
+map <down> <ESC>:bn<RETURN>
+map <left> <ESC>:NERDTreeToggle<RETURN>
+map <right> <ESC>:Tlist<RETURN>
+map <up> <ESC>:bp<RETURN>
+
+map <C-l> <C-w>l
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-tab> <C-w>p
+
+nnoremap <Space> :
 
